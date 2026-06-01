@@ -4,15 +4,15 @@
   xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>天天AI十大新闻</title>
-    <description>每天早上用个人博客口吻梳理十条重要 AI 新闻，并提供中文音频版。</description>
+    <description>每天早上用个人博客口吻梳理十条重要 AI 新闻，并提供中文和英文音频版。</description>
     <link>https://lida2008-create.github.io/tiantian-ai-news/</link>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 01 Jun 2026 22:47:24 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 01 Jun 2026 23:27:46 GMT</lastBuildDate>
     <generator>Codex static podcast generator</generator>
     <itunes:author>天天AI</itunes:author>
     <itunes:owner>
       <itunes:name>天天AI</itunes:name>
-      <itunes:email>you@example.com</itunes:email>
+      <itunes:email>lida19830313@gmail.com</itunes:email>
     </itunes:owner>
     <itunes:category text="Technology">
       <itunes:category text="Tech News"/>
