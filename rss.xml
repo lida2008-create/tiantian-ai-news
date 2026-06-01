@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>天天AI十大新闻</title>
+    <description>每天早上用个人博客口吻梳理十条重要 AI 新闻，并提供中文音频版。</description>
+    <link>https://YOUR_GITHUB_USERNAME.github.io/tiantian-ai-news/</link>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 01 Jun 2026 21:45:31 GMT</lastBuildDate>
+    <generator>Codex static podcast generator</generator>
+    <itunes:author>天天AI</itunes:author>
+    <itunes:owner>
+      <itunes:name>天天AI</itunes:name>
+      <itunes:email>you@example.com</itunes:email>
+    </itunes:owner>
+    <itunes:category text="Technology">
+      <itunes:category text="Tech News"/>
+    </itunes:category>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:image href="https://YOUR_GITHUB_USERNAME.github.io/tiantian-ai-news/cover.png"/>
+    <item>
+      <title>天天AI十大新闻｜2026-06-01</title>
+      <description>今天聊 Anthropic IPO、Nvidia AI 硬件、机器人、欧洲算力和中国模型价格战。
+
+今天的 AI 新闻，感觉像是一个行业在同一天踩下了三脚油门：资本市场、算力硬件、机器人和企业应用一起往前冲。
+
+最醒目的当然是 Anthropic。Claude 背后的公司已经向 SEC 递交了保密版上市文件，正式把 IPO 放到台面上。这个动作发生在它刚完成六百五十亿美元融资、估值接近九千六百五十亿美元之后，所以这不只是又一家 AI 公司要上市，而是整个基础模型行业准备接受公开市场定价的一次大考。
+
+我觉得这件事重要，是因为 Anthropic 和 OpenAI 的竞争正在从模型能力、产品体验，进一步扩展到资本市场。如果 Anthropic 能顺利上市，公开投资人第一次会有机会用季度报表去审视一家前沿模型公司的增长、毛利、算力成本和安全投入。
+
+第二条还是 Anthropic，但角度不同。它的最新估值已经超过 OpenAI 的上一轮私募估值，这说明资本市场现在愿意押注第二家超级 AI 平台也能长成巨型基础设施公司。这里面当然有泡沫的味道，但也有真实变化：企业客户不再只买一个聊天机器人，而是在买代码、客服、研究、自动化流程，甚至买一整套新的工作方式。
+
+第三条是 Nvidia。Jensen Huang 在 Computex 期间透露，Nvidia 的 Vera CPU 早期客户包括 OpenAI、Anthropic 和 SpaceX。这个信号很强：AI 算力竞争不再只是 GPU，CPU、内存、互连、整机架构都要一起重做。对 AI 公司来说，谁能把每一瓦电、每一美元算力榨得更干净，谁就能在模型价格和响应速度上获得优势。
+
+第四条也是 Nvidia，但更靠近我们手边的电脑。Nvidia 和 Microsoft 要一起重新发明 PC，从今年秋天开始会有三十多款笔记本和十款台式机搭载新的 AI PC 芯片。这个方向值得盯，因为本地 AI 终于不只是能跑个小模型的玩具，而是可能进入日常生产力设备。
+
+第五条是机器人。Nvidia 发布了开放的人形机器人参考设计，基于 Isaac GR00T 和 Jetson Thor，并结合 Unitree 的机器人身体和 Sharpa 的五指灵巧手。我的直觉是，机器人行业现在缺的不是一个炫酷视频，而是标准化平台。只要开发者能在相对统一的硬件和软件栈上训练、迁移、验证模型，具身智能才可能从实验室演示走向可复制的产品。
+
+第六条是 Nvidia 的 Cosmos 3。它是一个开放的物理 AI 基础模型，目标是帮助机器人和自动驾驶系统用更少训练数据理解真实世界。这类模型如果成熟，会非常关键，因为真实世界的数据又贵又慢又危险。能在模拟和世界模型里学得更多，就意味着机器人、车辆和工业系统可以更快迭代。
+
+第七条转到欧洲。法国正在吸引新的 AI 数据中心项目，Financial Times 报道 Ardian 和 Verne 计划在巴黎附近建设最高五百兆瓦的 AI gigafactory；另有报道称 SoftBank 承诺在法国建设五吉瓦级别 AI 基础设施。欧洲过去常被说模型不够强、云不够大，但现在它至少在努力补上算力和能源这一层底座。
+
+第八条来自中国模型公司 MiniMax。它推出了新的 M3 编程模型，称能力接近 Claude Opus 4.7，但输入价格低很多。这里的重点不是单个 benchmark，而是价格战。模型能力一旦接近，企业采购会马上问：同样完成一次代码修改、一次评审、一次迁移，成本差多少？这会逼所有模型公司把聪明变成又聪明又便宜。
+
+第九条是 Asana 收购 StackAI。StackAI 是做无代码 AI agent 的平台，收购价据报约七千五百万美元。这个新闻不如 IPO 和芯片发布热闹，但很能代表企业 AI 的真实落点：不是每家公司都要训练模型，更多公司只是想把报表、审批、客户资料、工单系统串起来，让 AI agent 能在内部流程里干活。
+
+第十条是 Intel。它在 Computex 期间介绍了 Crescent Island 数据中心 GPU，定位是面向 agentic AI，并且没有走昂贵 HBM 路线，而是使用 LPDDR5X。这个选择很有意思，因为它押的是推理成本和供给弹性。如果未来很多 AI 工作负载是长时间运行的代理任务，而不是一次性的聊天，硬件市场就会需要更多不同价位、不同内存结构的芯片。
+
+把今天这些新闻放在一起看，我的感受是：AI 行业已经不是单线叙事了。不是某个模型更强这么简单，而是上市融资、芯片架构、个人电脑、机器人、企业流程、欧洲算力、中国价格战同时发生。它像一个新工业部门在快速成形，每家公司都在抢自己的位置。
+
+但我也会保留一点怀疑。估值接近一万亿美元的私营 AI 公司，听起来令人兴奋，也令人紧张。AI PC 很美好，但消费者到底愿不愿意为本地模型多花钱，还要看体验。机器人平台很诱人，但走进工厂、仓库、医院之前，还有大量可靠性问题。今天的主旋律是加速，可真正值得长期关注的，是这些加速最后能不能变成稳定、便宜、可信的产品。
+
+如果这是早晨的一杯咖啡，我会给今天的关键词写三个：公开市场、物理 AI、成本战。前两个决定 AI 的想象力，最后一个决定它能不能真的普及。</description>
+      <link>https://YOUR_GITHUB_USERNAME.github.io/tiantian-ai-news/episodes/ai-news-2026-06-01.html</link>
+      <guid isPermaLink="false">https://YOUR_GITHUB_USERNAME.github.io/tiantian-ai-news/audio/ai-news-2026-06-01-xiaoxiao.mp3</guid>
+      <pubDate>Mon, 01 Jun 2026 08:00:00 +0200</pubDate>
+      <enclosure url="https://YOUR_GITHUB_USERNAME.github.io/tiantian-ai-news/audio/ai-news-2026-06-01-xiaoxiao.mp3" length="2396880" type="audio/mpeg"/>
+      <itunes:duration>06:39</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+  </channel>
+</rss>
