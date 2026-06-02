@@ -7,7 +7,7 @@
     <description>每天早上用个人博客口吻梳理十条重要 AI 新闻，并提供中文和英文音频版。</description>
     <link>https://lida2008-create.github.io/tiantian-ai-news/</link>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 02 Jun 2026 14:53:03 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 02 Jun 2026 19:17:16 GMT</lastBuildDate>
     <generator>Codex static podcast generator</generator>
     <itunes:author>天天AI</itunes:author>
     <itunes:owner>
@@ -57,6 +57,68 @@
       <pubDate>Mon, 01 Jun 2026 08:00:00 +0200</pubDate>
       <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/ai-news-2026-06-01-xiaoxiao.mp3" length="2396880" type="audio/mpeg"/>
       <itunes:duration>06:39</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
+      <title>天天AI十大新闻｜2026-06-02</title>
+      <description>今天聊 Anthropic IPO、AI 成本、OpenAI 与 AWS、Microsoft Build、NVIDIA 机器人与物理 AI、以及 Google Gemini 生态。
+
+男：大家早上好，今天是二零二六年六月二日，欢迎收听天天AI十大新闻。我是今天的男主持。
+
+女：大家早上好，我是今天的女主持。今天的AI新闻，主线很清楚，资本、算力、智能体和机器人，四条线一起往前冲。
+
+男：第一条，Anthropic 已经向美国证券交易委员会提交了保密 IPO 文件。Claude 背后的这家公司，正式把上市这件事提上日程。
+
+女：这件事重要，是因为AI公司终于要被公开市场审视了。大家不只看模型有多聪明，也会看成本、收入和烧钱速度。
+
+男：第二条，Anthropic 的上市消息刚出来，市场马上开始讨论AI成本。Sam Altman 也说，企业担心AI太贵，是很公平的批评。
+
+女：这句话挺关键。AI不是魔法，是账单。模型越强，算力越贵，最后总要有人问一句，这钱花得值不值。
+
+男：第三条，OpenAI 的前沿模型和 Codex，已经在 AWS 上正式可用。企业可以通过 Amazon Bedrock 使用这些能力。
+
+女：这意味着 OpenAI 不只是在自家产品里竞争，也在云平台里竞争。对企业客户来说，选择会更多，谈价空间也可能更大。
+
+男：第四条，Microsoft Build 二零二六今天开幕，AI智能体是核心主题。Windows 正在被推向一个能运行智能体的平台。
+
+女：这不是简单加一个聊天窗口，而是让智能体进入开发工具、系统界面和企业工作流。电脑像是要从工具，变成同事。
+
+男：第五条，微软还在 Windows 开发方向上发布了新的 AI 相关能力，包括 WinUI agent plugin 和更安全的代码执行环境。
+
+女：这条对开发者很重要。以后AI不只是帮你写几行代码，而是能在受控环境里试运行、改界面、处理任务。
+
+男：第六条，英伟达在 Computex 推出 RTX Spark Superchip，用于新的AI个人电脑。它面向本地智能体和大模型推理。
+
+女：重点是本地AI。以后有些智能体不一定全靠云端，电脑自己也能处理更长上下文、更复杂的任务。
+
+男：第七条，英伟达还发布了 Cosmos 三世界模型，面向物理AI、机器人和自动驾驶训练。
+
+女：世界模型听起来抽象，但很实用。机器人要进入现实世界，必须先学会理解空间、动作、声音和结果。
+
+男：第八条，英伟达推出 Alpamayo 二 Super，这是面向 Robotaxi 的开放推理视觉语言动作模型。
+
+女：自动驾驶不是只识别红绿灯，它要理解场景、预测动作，还要做安全决策。这类模型就是为这个方向准备的。
+
+男：第九条，英伟达和合作伙伴继续推动人形机器人参考设计，包括 Isaac GR00T 相关生态。
+
+女：这说明机器人正在从演示视频，走向标准化开发。好消息是进展快，坏消息是以后连机器人也可能会开周会。
+
+男：第十条，Google Gemini 相关生态继续扩展，AI搜索、智能体和视频生成仍在快速推进。
+
+女：Google 的重点，是把 Gemini 放进搜索、开发、视频和日常工具里。它不一定每天都上头条，但渗透速度很快。
+
+男：总结一下，今天最值得记住的不是某一个模型，而是AI正在进入三个地方，资本市场、个人电脑和真实世界。
+
+女：是的。资本市场会问它赚不赚钱，个人电脑会问它能不能本地运行，真实世界会问它会不会犯错。
+
+男：这就是今天的AI十大新闻。先别急着焦虑，至少现在，我们还是人类主持。
+
+女：感谢收听天天AI十大新闻。我们明天早上继续见。</description>
+      <link>https://lida2008-create.github.io/tiantian-ai-news/episodes/ai-news-2026-06-02.html</link>
+      <guid isPermaLink="false">https://lida2008-create.github.io/tiantian-ai-news/audio/ai-news-2026-06-02-zh-final-preview.mp3</guid>
+      <pubDate>Tue, 02 Jun 2026 21:10:00 +0200</pubDate>
+      <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/ai-news-2026-06-02-zh-final-preview.mp3" length="2919789" type="audio/mpeg"/>
+      <itunes:duration>04:03</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
   </channel>
