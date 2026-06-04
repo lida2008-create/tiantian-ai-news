@@ -73,8 +73,8 @@ function zhDate(isoDate) {
   return `${year}年${month}月${day}日`;
 }
 
-function isParisMidnightHour() {
-  return parisParts().hour === '00';
+function isParisTargetHour() {
+  return parisParts().hour === '01';
 }
 
 async function fetchText(url) {
@@ -271,8 +271,8 @@ async function updateRss(itemXml, date) {
 
 async function main() {
   const scheduled = process.argv.includes('--scheduled');
-  if (scheduled && !isParisMidnightHour()) {
-    console.log('Not midnight hour in Europe/Paris; skipping scheduled duplicate.');
+  if (scheduled && !isParisTargetHour()) {
+    console.log('Not 01:00 hour in Europe/Paris; skipping scheduled duplicate.');
     return;
   }
 
