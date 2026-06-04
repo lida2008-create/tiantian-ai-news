@@ -13,11 +13,11 @@ const TTS_VOICE = 'zh-CN-YunyangNeural';
 const TTS_STYLE = 'newscast';
 
 const NEWS_QUERIES = [
-  'Reuters global markets oil stocks bonds economy finance when:1d',
-  'Reuters business finance economy central bank markets when:1d',
-  'CNBC markets economy finance stocks oil bonds when:1d',
-  'Bloomberg markets economy finance stocks rates oil when:1d',
-  '财经 市场 经济 股市 债券 原油 汇率 今日 when:1d'
+  '今日 财经 市场 经济 股市 债券 原油 汇率 央行 when:1d',
+  '中国 财经 新闻 股市 人民币 资本市场 证券时报 财联社 when:1d',
+  '全球 财经 新闻 美股 欧股 日股 原油 黄金 汇率 when:1d',
+  '央行 利率 通胀 就业 数据 债券 市场 财经 when:1d',
+  '科技股 银行 能源 房地产 消费 财报 财经 when:1d'
 ];
 
 const CN_NUMBERS = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
@@ -128,17 +128,52 @@ async function collectNews() {
     seen.add(key);
     unique.push(item);
   }
-  return unique.slice(0, 18);
+  return unique.filter((item) => hasChinese(item.title) || hasChinese(item.snippet)).slice(0, 18);
+}
+
+function hasChinese(text = '') {
+  return /[\u4e00-\u9fff]/.test(text);
+}
+
+function removeEnglish(text = '') {
+  return stripHtml(text)
+    .replace(/[A-Za-z][A-Za-z0-9&;:'’.\/\-]*/g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/\s*[-|—_]\s*/g, '，')
+    .replace(/，{2,}/g, '，')
+    .replace(/^[，。\s]+|[，。\s]+$/g, '')
+    .trim();
 }
 
 function fallbackScript(date, news) {
-  const topTen = news.slice(0, 10);
-  const intro = `这里是天天财经，今天是${zhDate(date)}，主播天天带你快速听懂今天最重要的十条财经新闻。今天我们关注全球市场、央行利率、能源价格、科技股、汇率和资本流动。`;
+  const topTen = news
+    .map((item) => ({
+      ...item,
+      title: removeEnglish(item.title),
+      snippet: removeEnglish(item.snippet || item.title)
+    }))
+    .filter((item) => hasChinese(item.title))
+    .slice(0, 10);
+
+  const openers = [
+    '先看市场情绪',
+    '第二个焦点转向政策面',
+    '接下来是大宗商品',
+    '第四条看汇率和资金流向',
+    '第五条关注科技和成长板块',
+    '第六条来自债券市场',
+    '第七条说到银行和金融机构',
+    '第八条看消费与企业经营',
+    '第九条关注海外市场',
+    '最后一条看资本市场动态'
+  ];
+
+  const intro = `这里是天天财经，今天是${zhDate(date)}，主播天天带你快速听懂今天最重要的十条财经新闻。`;
   const body = topTen.map((item, index) => {
-    const snippet = item.snippet || item.title;
-    return `第${CN_NUMBERS[index]}条，${item.title}。${snippet}。这条新闻值得关注，是因为它可能影响投资者风险偏好、企业成本、利率预期，或者全球资金流向。`;
+    const detail = item.snippet && item.snippet !== item.title ? `。${item.snippet}` : '';
+    return `第${CN_NUMBERS[index]}条，${openers[index]}，${item.title}${detail}。`;
   }).join('\n\n');
-  const outro = `总结一下，今天财经市场的主线，是资金在增长预期、通胀压力和政策不确定性之间重新定价。这里是天天财经，我是天天，我们明天继续用十条新闻，抓住全球市场的重点。`;
+  const outro = `今天的财经主线先到这里。这里是天天财经，我是天天，我们明天继续用十条新闻，抓住全球市场的重点。`;
   return `${intro}\n\n${body}\n\n${outro}`;
 }
 
@@ -165,7 +200,9 @@ async function openAiScript(date, news) {
           content: [
             `日期：${zhDate(date)}。主播名：天天。`,
             '请从候选新闻中选出十条最重要的财经新闻，写成约1800到2200个中文字符的单人播客口播稿。',
-            '结构：开场一句；第一条到第十条；最后总结。风格参考“天天财经”：清楚、紧凑、解释为什么重要。',
+            '必须全部使用中文口语表达。不要出现英文标题、英文机构名、英文单词；遇到英文内容要翻译或改写成中文。',
+            '结构：开场一句；第一条到第十条；最后总结。每条写法要有变化，不要套同一句模板。',
+            '不要解释“为什么重要”，不要说“这条新闻值得关注”，不要给投资建议。',
             '不要添加背景音乐说明，不要使用 Markdown，不要输出来源列表。',
             '候选新闻：',
             JSON.stringify(news, null, 2)
