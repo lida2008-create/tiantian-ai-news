@@ -334,7 +334,7 @@ async function main() {
 
   const news = await collectNews();
   if (news.length < 3) {
-    throw new Error(`Only found ${news.length} candidate news items.`);
+    console.warn(`Only found ${news.length} candidate news items; using fallback market topics.`);
   }
 
   let script;
