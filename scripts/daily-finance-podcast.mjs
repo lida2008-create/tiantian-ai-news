@@ -13,11 +13,13 @@ const TTS_VOICE = 'zh-CN-YunyangNeural';
 const TTS_STYLE = 'newscast';
 
 const NEWS_QUERIES = [
-  '今日 财经 市场 经济 股市 债券 原油 汇率 央行 when:1d',
-  '中国 财经 新闻 股市 人民币 资本市场 证券时报 财联社 when:1d',
+  '今日 财经 新闻 股市 市场 经济 when:1d',
+  '中国 财经 新闻 央行 人民币 资本市场 when:1d',
   '全球 财经 新闻 美股 欧股 日股 原油 黄金 汇率 when:1d',
   '央行 利率 通胀 就业 数据 债券 市场 财经 when:1d',
-  '科技股 银行 能源 房地产 消费 财报 财经 when:1d'
+  '科技股 银行 能源 房地产 消费 财报 财经 when:1d',
+  '证券时报 财联社 第一财经 每日经济新闻 财经 when:1d',
+  '财经网 新浪财经 东方财富 经济观察报 when:1d'
 ];
 
 const CN_NUMBERS = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
@@ -128,7 +130,8 @@ async function collectNews() {
     seen.add(key);
     unique.push(item);
   }
-  return unique.filter((item) => hasChinese(item.title) || hasChinese(item.snippet)).slice(0, 18);
+  const chinese = unique.filter((item) => hasChinese(item.title) || hasChinese(item.snippet));
+  return (chinese.length >= 6 ? chinese : unique).slice(0, 24);
 }
 
 function hasChinese(text = '') {
@@ -154,6 +157,11 @@ function fallbackScript(date, news) {
     }))
     .filter((item) => hasChinese(item.title))
     .slice(0, 10);
+
+  while (topTen.length < 10) {
+    const topics = ['全球股市震荡调整', '主要央行政策预期变化', '国际油价和黄金价格波动', '人民币与美元汇率走势', '科技股和银行股表现分化', '债券收益率变化', '消费和企业盈利预期', '资本市场资金流向', '大宗商品价格变化', '上市公司财报动向'];
+    topTen.push({ title: topics[topTen.length], snippet: '' });
+  }
 
   const openers = [
     '先看市场情绪',
@@ -199,8 +207,8 @@ async function openAiScript(date, news) {
           role: 'user',
           content: [
             `日期：${zhDate(date)}。主播名：天天。`,
-            '请从候选新闻中选出十条最重要的财经新闻，写成约1800到2200个中文字符的单人播客口播稿。',
-            '必须全部使用中文口语表达。不要出现英文标题、英文机构名、英文单词；遇到英文内容要翻译或改写成中文。',
+            '请从候选新闻中选出十条最重要的财经新闻，写成约1800到2200个中文字符的单人播客口播稿。候选不足时，可以围绕候选里反复出现的财经主题补齐十条，但不能编造具体数字。',
+            '必须全部使用中文口语表达。不要出现英文标题、英文机构名、英文单词、网址或来源名；遇到英文内容要翻译或改写成中文。',
             '结构：开场一句；第一条到第十条；最后总结。每条写法要有变化，不要套同一句模板。',
             '不要解释“为什么重要”，不要说“这条新闻值得关注”，不要给投资建议。',
             '不要添加背景音乐说明，不要使用 Markdown，不要输出来源列表。',
@@ -325,7 +333,7 @@ async function main() {
   await mkdir(EPISODE_DIR, { recursive: true });
 
   const news = await collectNews();
-  if (news.length < 10) {
+  if (news.length < 3) {
     throw new Error(`Only found ${news.length} candidate news items.`);
   }
 
