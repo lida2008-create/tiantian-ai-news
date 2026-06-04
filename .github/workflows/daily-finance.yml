@@ -1,0 +1,46 @@
+name: Daily Tiantian Finance
+
+on:
+  schedule:
+    # Europe/Paris 01:00 during daylight saving time.
+    - cron: '0 23 * * *'
+    # Europe/Paris 01:00 during standard time.
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-tiantian-finance
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate finance podcast
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4.1-mini' }}
+        run: node scripts/daily-finance-podcast.mjs --scheduled
+
+      - name: Commit and push if changed
+        run: |
+          if git diff --quiet --exit-code -- finance-rss.xml audio episodes; then
+            echo "No new episode generated."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add finance-rss.xml audio episodes
+          git commit -m "Add daily finance episode"
+          git push
