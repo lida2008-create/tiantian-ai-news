@@ -153,24 +153,54 @@ def collect_top_news(limit: int = 10) -> list[NewsItem]:
     return deduped
 
 
+def item_context(title: str, summary: str) -> list[str]:
+    text = f"{title} {summary}"
+    contexts = []
+    if any(word in text for word in ["转会", "标价", "皇马", "阿森纳", "曼联", "曼城", "巴萨", "切尔西", "利物浦"]):
+        contexts.append("这类消息的重点不只是球员本人，还包括报价节奏、合同年限、薪资空间和俱乐部夏窗优先级。")
+        contexts.append("如果谈判继续推进，相关球队的阵容结构和后续引援预算都会受到影响。")
+    if any(word in text for word in ["世界杯", "亚洲杯", "国家队", "国足", "签证"]):
+        contexts.append("国家队层面的新闻更看重备战连续性，赛程、旅行、训练安排和球员状态都会影响比赛内容。")
+        contexts.append("越接近正式比赛，任何非竞技因素都会被放大，教练组需要尽快把注意力拉回阵容和战术。")
+    if any(word in text for word in ["青训", "少年", "U12", "小将", "校园足球", "巴塞罗那"]):
+        contexts.append("青训新闻的价值在于长期跟踪，签约和夺冠只是起点，真正关键的是后续训练质量和比赛环境。")
+        contexts.append("年轻球员能否稳定成长，取决于技术培养、身体发育、心理适应和高水平比赛机会。")
+    if any(word in text for word in ["中超", "申花", "国安", "泰山", "海港"]):
+        contexts.append("中超球队的补强通常更强调即战力，本土球员位置适配和更衣室稳定性同样重要。")
+        contexts.append("相关传闻最终还要看俱乐部计划、球员意愿和注册窗口安排。")
+    if any(word in text for word in ["欧冠", "冠军", "C罗", "梅西", "球王"]):
+        contexts.append("这类话题往往会回到荣誉、数据、关键比赛表现和时代影响力的比较。")
+        contexts.append("不同标准会得出不同结论，所以争议本身也反映了球迷对足球价值的不同排序。")
+    if not contexts:
+        contexts.append("这条新闻后续要重点看事件是否进入正式流程，以及相关球队和球员有没有进一步动作。")
+        contexts.append("如果细节继续增加，它可能会影响接下来一天的赛程讨论、转会判断或球队备战节奏。")
+    return contexts
+
+
+def expand_item_for_speech(item: NewsItem, index: int, target_chars: int) -> str:
+    title = normalize_for_speech(item.title)
+    summary = normalize_for_speech(item.summary)
+    parts = [f"第{index}条，{title}。"]
+    if summary and summary not in title:
+        parts.append(f"{summary}。")
+    for context in item_context(title, summary):
+        if sum(len(part) for part in parts) >= target_chars:
+            break
+        parts.append(context)
+    return "".join(parts)
+
+
 def build_script(items: list[NewsItem], date_text: str) -> str:
     lines = [f"{date_text}，天天足球。"]
+    item_target = max(150, (2000 - len(lines[0])) // max(len(items), 1))
     for index, item in enumerate(items, start=1):
-        title = normalize_for_speech(item.title)
-        summary = normalize_for_speech(item.summary)
-        details = []
-        if title:
-            details.append(title)
-        if summary and summary not in title:
-            details.append(summary)
-        text = "。".join(details).strip("。")
-        lines.append(f"第{index}条，{text}。")
+        lines.append(expand_item_for_speech(item, index, item_target))
     script = "\n".join(lines)
-    return trim_script(script, target_chars=2000)
+    return fit_script(script, target_chars=2000)
 
 
-def trim_script(script: str, target_chars: int) -> str:
-    if len(script) <= target_chars:
+def fit_script(script: str, target_chars: int) -> str:
+    if len(script) <= target_chars + 120:
         return script
     lines = script.splitlines()
     result = []
@@ -187,7 +217,6 @@ def trim_script(script: str, target_chars: int) -> str:
             result.append(f"{clipped}。")
         break
     return "\n".join(result)
-    return "\n".join(lines)
 
 
 async def synthesize_audio(script: str, output_file: Path):

@@ -26,9 +26,23 @@ python scripts/daily_football_podcast.py
 
 ## 自动每天运行
 
-项目已经包含 GitHub Actions 配置：`.github/workflows/daily-football-podcast.yml`。
+当前发布地址：
 
-默认按巴黎时间凌晨 1 点运行。GitHub Actions 使用 UTC，所以当前配置是：
+```text
+https://lida2008-create.github.io/tiantian-ai-news/football/rss.xml
+```
+
+本地或自动任务每天运行：
+
+```bash
+SITE_BASE_URL=https://lida2008-create.github.io/tiantian-ai-news/football \
+python scripts/daily_football_podcast.py
+python scripts/publish_to_github.py
+```
+
+默认按巴黎时间凌晨 1 点运行。
+
+如果使用 GitHub Actions，巴黎时间凌晨 1 点对应：
 
 ```yaml
 cron: "0 23 * * *"
