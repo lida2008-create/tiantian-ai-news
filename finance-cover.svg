@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400">
+  <rect width="1400" height="1400" fill="#0b1220"/>
+  <rect x="90" y="90" width="1220" height="1220" fill="none" stroke="#eab308" stroke-opacity="0.35" stroke-width="8"/>
+  <circle cx="260" cy="260" r="80" fill="#22c55e" opacity="0.16"/>
+  <circle cx="1120" cy="1080" r="130" fill="#eab308" opacity="0.10"/>
+  <path d="M210 980 C360 900, 510 940, 650 850 S930 760, 1190 690" fill="none" stroke="#22c55e" stroke-width="10" stroke-linecap="round"/>
+  <path d="M210 1080 H1190" stroke="#334155" stroke-width="3"/>
+  <text x="700" y="500" text-anchor="middle" font-family="PingFang SC, Heiti SC, STHeiti, sans-serif" font-size="168" font-weight="700" fill="#f8fafc">天天财经</text>
+  <text x="700" y="620" text-anchor="middle" font-family="Avenir Next, Arial, sans-serif" font-size="58" letter-spacing="7" fill="#eab308">TIANTIAN FINANCE</text>
+  <text x="700" y="795" text-anchor="middle" font-family="PingFang SC, Heiti SC, STHeiti, sans-serif" font-size="64" fill="#cbd5e1">每日十条财经新闻</text>
+  <text x="700" y="905" text-anchor="middle" font-family="Avenir Next, Arial, sans-serif" font-size="38" letter-spacing="5" fill="#94a3b8">MARKETS · ECONOMY · TECH</text>
+</svg>

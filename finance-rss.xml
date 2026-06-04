@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>天天财经</title>
+    <description>每天用十条重要财经新闻，快速梳理全球市场、宏观经济、科技股、能源、汇率和资本流动。</description>
+    <link>https://lida2008-create.github.io/tiantian-ai-news/</link>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 04 Jun 2026 13:05:00 +0200</lastBuildDate>
+    <generator>Codex static podcast generator</generator>
+    <itunes:author>天天财经</itunes:author>
+    <itunes:owner>
+      <itunes:name>天天财经</itunes:name>
+      <itunes:email>lida19830313@gmail.com</itunes:email>
+    </itunes:owner>
+    <itunes:category text="Business">
+      <itunes:category text="Business News"/>
+    </itunes:category>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:image href="https://lida2008-create.github.io/tiantian-ai-news/finance-cover.png"/>
+    <image>
+      <url>https://lida2008-create.github.io/tiantian-ai-news/finance-cover.png</url>
+      <title>天天财经</title>
+      <link>https://lida2008-create.github.io/tiantian-ai-news/</link>
+    </image>
+    <item>
+      <title>天天财经｜2026-06-04 十条财经新闻</title>
+      <description>六月四日天天财经，主播天天用十条新闻梳理今天最重要的财经市场变化：中东局势推高油价，全球股市回落，美债收益率上行，日元逼近一美元兑一百六十日元，日本干预压力升温，欧洲央行加息预期升温，私募市场出现流动性警讯，人工智能继续支撑科技股，同时芯片通胀开始向硬件和云成本外溢。本集为无背景音乐版本。</description>
+      <link>https://lida2008-create.github.io/tiantian-ai-news/episodes/tiantian-finance-2026-06-04.html</link>
+      <guid isPermaLink="false">https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-04-wangwangit-yunyang-newscast.mp3</guid>
+      <pubDate>Thu, 04 Jun 2026 12:48:50 +0200</pubDate>
+      <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-04-wangwangit-yunyang-newscast.mp3" length="1849680" type="audio/mpeg"/>
+      <itunes:duration>00:05:08</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+  </channel>
+</rss>
