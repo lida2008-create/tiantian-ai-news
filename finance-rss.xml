@@ -7,7 +7,7 @@
     <description>每天用十条重要财经新闻，快速梳理全球市场、宏观经济、科技股、能源、汇率和资本流动。</description>
     <link>https://lida2008-create.github.io/tiantian-ai-news/</link>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 04 Jun 2026 13:05:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jun 2026 23:14:10 GMT</lastBuildDate>
     <generator>Codex static podcast generator</generator>
     <itunes:author>天天财经</itunes:author>
     <itunes:owner>
@@ -32,6 +32,16 @@
       <pubDate>Thu, 04 Jun 2026 12:48:50 +0200</pubDate>
       <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-04-wangwangit-yunyang-newscast.mp3" length="1849680" type="audio/mpeg"/>
       <itunes:duration>00:05:08</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
+      <title>天天财经｜2026-06-05 十条财经新闻</title>
+      <description>这里是天天财经，今天是2026年6月5日，主播天天带你快速听懂今天最重要的十条财经新闻。今天我们关注全球市场、央行利率、能源价格、科技股、汇率和资本流动。 第一条，Morning Bid: Summer clouds。Morning Bid: Summer clouds &amp;nbsp;&amp;nbsp; Reuters。这条新闻值得关注，是因为它可能影响投资者风险偏好、企业成本、利率预期，或者全球资金流向。 第二条，India to drop capital gains tax for foreign investors in government bonds:</description>
+      <link>https://lida2008-create.github.io/tiantian-ai-news/episodes/tiantian-finance-2026-06-05.html</link>
+      <guid isPermaLink="false">https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-05-wangwangit-yunyang-newscast.mp3</guid>
+      <pubDate>Thu, 04 Jun 2026 23:14:10 GMT</pubDate>
+      <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-05-wangwangit-yunyang-newscast.mp3" length="1481472" type="audio/mpeg"/>
+      <itunes:duration>00:04:07</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
   </channel>
