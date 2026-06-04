@@ -74,7 +74,8 @@ function zhDate(isoDate) {
 }
 
 function isParisTargetHour() {
-  return parisParts().hour === '01';
+  const hour = parisParts().hour;
+  return hour === '01' || hour === '02';
 }
 
 async function fetchText(url) {
