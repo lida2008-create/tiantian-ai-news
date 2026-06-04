@@ -4,8 +4,7 @@ import { basename } from 'node:path';
 
 const SITE = 'https://lida2008-create.github.io/tiantian-ai-news';
 const ROOT = new URL('../', import.meta.url);
-const RSS_PATH = new URL('rss.xml', ROOT);
-const FINANCE_RSS_PATH = new URL('finance-rss.xml', ROOT);
+const RSS_PATH = new URL('finance-rss.xml', ROOT);
 const AUDIO_DIR = new URL('audio/', ROOT);
 const EPISODE_DIR = new URL('episodes/', ROOT);
 
@@ -267,7 +266,6 @@ async function updateRss(itemXml, date) {
   rss = rss.replace(/<lastBuildDate>.*?<\/lastBuildDate>/s, `<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>`);
   rss = rss.replace(/\s*<\/channel>\s*<\/rss>\s*$/s, `\n${itemXml}\n  </channel>\n</rss>\n`);
   await writeFile(RSS_PATH, rss);
-  await writeFile(FINANCE_RSS_PATH, rss);
   return true;
 }
 
