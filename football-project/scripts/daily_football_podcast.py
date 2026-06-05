@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 import asyncio
 import html
+import html as html_lib
 import json
 import os
 import re
 import subprocess
+import tempfile
 import textwrap
 import urllib.parse
 import xml.etree.ElementTree as ET
@@ -12,6 +14,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from email.utils import format_datetime
 from pathlib import Path
+from typing import Optional
 from zoneinfo import ZoneInfo
 
 import feedparser
@@ -24,6 +27,7 @@ DOCS_DIR = ROOT / "docs"
 AUDIO_DIR = DOCS_DIR / "audio"
 DATA_DIR = ROOT / "data"
 SCRIPT_DIR = DATA_DIR / "scripts"
+MANUAL_NEWS_DIR = DATA_DIR / "manual_news"
 EPISODES_FILE = DATA_DIR / "episodes.json"
 RSS_FILE = DOCS_DIR / "rss.xml"
 COVER_FILE = DOCS_DIR / "cover.jpg"
@@ -42,6 +46,14 @@ TTS_STYLE = os.getenv("TTS_STYLE", "newscast")
 TTS_SPEED = float(os.getenv("TTS_SPEED", "1.0"))
 TTS_PITCH = os.getenv("TTS_PITCH", "0")
 TTS_VOLUME = os.getenv("TTS_VOLUME", "0")
+MACOS_TTS_VOICE = os.getenv("MACOS_TTS_VOICE", "Tingting")
+MACOS_TTS_RATE = os.getenv("MACOS_TTS_RATE", "185")
+AUDIO_MIN_BYTES = int(os.getenv("AUDIO_MIN_BYTES", "50000"))
+AUDIO_MIN_DURATION = float(os.getenv("AUDIO_MIN_DURATION", "30"))
+ENABLE_LOCAL_TTS_FALLBACK = os.getenv("ENABLE_LOCAL_TTS_FALLBACK", "0") == "1"
+AZURE_SPEECH_KEY = os.getenv("AZURE_SPEECH_KEY") or os.getenv("SPEECH_KEY")
+AZURE_SPEECH_REGION = os.getenv("AZURE_SPEECH_REGION") or os.getenv("SPEECH_REGION")
+AZURE_TTS_OUTPUT_FORMAT = os.getenv("AZURE_TTS_OUTPUT_FORMAT", "audio-48khz-192kbitrate-mono-mp3")
 
 if not SITE_BASE_URL and os.getenv("GITHUB_REPOSITORY"):
     owner, repo = os.getenv("GITHUB_REPOSITORY").split("/", 1)
@@ -56,6 +68,13 @@ class NewsItem:
     published: datetime
     summary: str
     score: float
+
+
+@dataclass
+class FeedFailure:
+    feed_name: str
+    url: str
+    error: str
 
 
 def today_local() -> datetime:
@@ -75,6 +94,12 @@ def normalize_for_speech(value: str) -> str:
     value = re.sub(r"\s+-\s+[^。！？.!?]{1,40}$", "", value)
     value = re.sub(r"\s+", " ", value)
     return value.strip(" -，,。")
+
+
+def effective_tts_style(voice: str, style: str) -> str:
+    if voice == "zh-CN-YunyangNeural" and style == "newscast":
+        return "newscast-casual"
+    return style
 
 
 def parse_date(entry) -> datetime:
@@ -126,14 +151,16 @@ def score_item(entry, feed_name: str, base_score: float, now: datetime) -> NewsI
     )
 
 
-def collect_top_news(limit: int = 10) -> list[NewsItem]:
+def collect_top_news(limit: int = 10) -> tuple[list[NewsItem], list[FeedFailure]]:
     now = datetime.now(timezone.utc)
     items: list[NewsItem] = []
+    failures: list[FeedFailure] = []
     for feed_name, url, base_score in news_feeds():
         try:
             parsed = fetch_feed(url)
         except Exception as exc:
             print(f"Skip feed {feed_name}: {exc}")
+            failures.append(FeedFailure(feed_name=feed_name, url=url, error=str(exc)))
             continue
         for entry in parsed.entries[:40]:
             item = score_item(entry, feed_name, base_score, now)
@@ -150,7 +177,67 @@ def collect_top_news(limit: int = 10) -> list[NewsItem]:
         deduped.append(item)
         if len(deduped) == limit:
             break
-    return deduped
+    return deduped, failures
+
+
+def parse_manual_news_item(raw: dict, index: int) -> NewsItem:
+    if not isinstance(raw, dict):
+        raise ValueError(f"Manual news item #{index} is not an object.")
+    title = normalize_for_speech(str(raw.get("title", "")).strip())
+    summary = normalize_for_speech(str(raw.get("summary", "")).strip())
+    if not title:
+        raise ValueError(f"Manual news item #{index} is missing title.")
+    published_raw = str(raw.get("published", "")).strip()
+    if published_raw:
+        try:
+            published = date_parser.parse(published_raw)
+            if published.tzinfo is None:
+                published = published.replace(tzinfo=timezone.utc)
+        except Exception as exc:
+            raise ValueError(f"Manual news item #{index} has invalid published value: {exc}") from exc
+    else:
+        published = datetime.now(timezone.utc)
+    return NewsItem(
+        title=title,
+        link=str(raw.get("link", "")).strip() or f"manual://item-{index}",
+        source=str(raw.get("source", "")).strip() or "manual",
+        published=published,
+        summary=summary,
+        score=float(raw.get("score", max(0, 100 - index))),
+    )
+
+
+def manual_news_file_for_date(date_key: str) -> Path:
+    return MANUAL_NEWS_DIR / f"{date_key}.json"
+
+
+def load_manual_news(path: Path, limit: int = 10) -> list[NewsItem]:
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(raw, list):
+        raise ValueError("Manual news file must be a JSON array.")
+    items = [parse_manual_news_item(item, index) for index, item in enumerate(raw, start=1)]
+    if len(items) < limit:
+        raise ValueError(f"Manual news file only contains {len(items)} items; at least {limit} are required.")
+    return items[:limit]
+
+
+def build_no_news_error(date_key: str, failures: list[FeedFailure]) -> str:
+    lines = [f"No football news found for {date_key}."]
+    if failures:
+        lines.append("Feed fetch failures:")
+        for failure in failures:
+            lines.append(f"- {failure.feed_name}: {failure.error}")
+    manual_path = manual_news_file_for_date(date_key)
+    lines.append(
+        "Create a manual fallback file with 10 items and rerun:"
+    )
+    lines.append(
+        f"- {manual_path} or set NEWS_JSON_FILE to another JSON file path."
+    )
+    lines.append(
+        'Each item should look like: {"title": "...", "summary": "...", "link": "https://...", "published": "2026-06-05T00:00:00+02:00"}'
+    )
+    return "\n".join(lines)
 
 
 def item_context(title: str, summary: str) -> list[str]:
@@ -220,12 +307,17 @@ def fit_script(script: str, target_chars: int) -> str:
 
 
 async def synthesize_audio(script: str, output_file: Path):
+    if AZURE_SPEECH_KEY and AZURE_SPEECH_REGION:
+        synthesize_audio_azure(script, output_file)
+        return
+
+    style = effective_tts_style(TTS_VOICE, TTS_STYLE)
     payload = {
         "input": script,
         "voice": TTS_VOICE,
         "speed": TTS_SPEED,
         "pitch": TTS_PITCH,
-        "style": TTS_STYLE,
+        "style": style,
         "volume": TTS_VOLUME,
     }
     try:
@@ -236,30 +328,181 @@ async def synthesize_audio(script: str, output_file: Path):
             timeout=120,
         )
         response.raise_for_status()
+        content_type = (response.headers.get("Content-Type") or "").lower()
+        if "audio" not in content_type and "mpeg" not in content_type and "octet-stream" not in content_type:
+            raise RuntimeError(
+                f"Remote TTS returned non-audio content-type: {content_type or 'unknown'}; "
+                f"body={response.text[:200]!r}"
+            )
         output_file.write_bytes(response.content)
-    except requests.RequestException:
-        result = subprocess.run(
+    except Exception as first_error:
+        with tempfile.TemporaryDirectory(prefix="daily-football-curl-") as tmpdir:
+            headers_file = Path(tmpdir) / "headers.txt"
+            body_file = Path(tmpdir) / "body.bin"
+            result = subprocess.run(
+                [
+                    "curl",
+                    "-L",
+                    "-sS",
+                    "-X",
+                    "POST",
+                    TTS_API_URL,
+                    "-H",
+                    "Content-Type: application/json",
+                    "-D",
+                    str(headers_file),
+                    "--data-binary",
+                    "@-",
+                    "-o",
+                    str(body_file),
+                ],
+                input=json.dumps(payload, ensure_ascii=False),
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            if result.returncode == 0:
+                header_text = headers_file.read_text(encoding="utf-8", errors="ignore")
+                content_type_match = re.search(r"^content-type:\s*(.+)$", header_text, flags=re.IGNORECASE | re.MULTILINE)
+                content_type = (content_type_match.group(1).strip().lower() if content_type_match else "")
+                if "audio" in content_type or "mpeg" in content_type or "octet-stream" in content_type:
+                    output_file.write_bytes(body_file.read_bytes())
+                    return
+
+                body_preview = body_file.read_text(encoding="utf-8", errors="ignore")[:200]
+                raise RuntimeError(
+                    f"Remote TTS returned non-audio content-type via curl: {content_type or 'unknown'}; "
+                    f"body={body_preview!r}"
+                ) from first_error
+
+            if ENABLE_LOCAL_TTS_FALLBACK:
+                synthesize_audio_macos(script, output_file)
+                return
+
+            raise RuntimeError(
+                result.stderr.strip() or f"Remote TTS request failed: {first_error}"
+            ) from first_error
+
+
+def build_azure_ssml(script: str) -> str:
+    escaped_script = html_lib.escape(script)
+    style = effective_tts_style(TTS_VOICE, TTS_STYLE)
+    return (
+        "<speak version='1.0' xml:lang='zh-CN' "
+        "xmlns='http://www.w3.org/2001/10/synthesis' "
+        "xmlns:mstts='https://www.w3.org/2001/mstts'>"
+        f"<voice name='{TTS_VOICE}'>"
+        f"<mstts:express-as style='{style}'>{escaped_script}</mstts:express-as>"
+        "</voice>"
+        "</speak>"
+    )
+
+
+def synthesize_audio_azure(script: str, output_file: Path):
+    if not AZURE_SPEECH_KEY or not AZURE_SPEECH_REGION:
+        raise RuntimeError("Azure Speech credentials are missing.")
+
+    endpoint = f"https://{AZURE_SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1"
+    ssml = build_azure_ssml(script)
+    response = requests.post(
+        endpoint,
+        headers={
+            "Ocp-Apim-Subscription-Key": AZURE_SPEECH_KEY,
+            "Content-Type": "application/ssml+xml",
+            "X-Microsoft-OutputFormat": AZURE_TTS_OUTPUT_FORMAT,
+            "User-Agent": "DailyFootballPodcast/1.0",
+        },
+        data=ssml.encode("utf-8"),
+        timeout=120,
+    )
+    response.raise_for_status()
+    content_type = (response.headers.get("Content-Type") or "").lower()
+    if "audio" not in content_type and "mpeg" not in content_type and "octet-stream" not in content_type:
+        raise RuntimeError(
+            f"Azure TTS returned non-audio content-type: {content_type or 'unknown'}; "
+            f"body={response.text[:200]!r}"
+        )
+    output_file.write_bytes(response.content)
+
+
+def synthesize_audio_macos(script: str, output_file: Path):
+    with tempfile.TemporaryDirectory(prefix="daily-football-tts-") as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        script_file = tmpdir_path / "script.txt"
+        aiff_file = tmpdir_path / "speech.aiff"
+        script_file.write_text(script, encoding="utf-8")
+
+        say_result = subprocess.run(
             [
-                "curl",
-                "-L",
-                "-sS",
-                "-X",
-                "POST",
-                TTS_API_URL,
-                "-H",
-                "Content-Type: application/json",
-                "--data-binary",
-                "@-",
+                "say",
+                "-v",
+                MACOS_TTS_VOICE,
+                "-r",
+                MACOS_TTS_RATE,
+                "-f",
+                str(script_file),
                 "-o",
-                str(output_file),
+                str(aiff_file),
             ],
-            input=json.dumps(payload, ensure_ascii=False),
-            text=True,
             capture_output=True,
+            text=True,
             check=False,
         )
-        if result.returncode != 0:
-            raise RuntimeError(result.stderr.strip() or "TTS request failed")
+        if say_result.returncode != 0:
+            raise RuntimeError(say_result.stderr.strip() or "macOS say synthesis failed")
+
+        ffmpeg_result = subprocess.run(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(aiff_file),
+                "-codec:a",
+                "libmp3lame",
+                "-q:a",
+                "2",
+                str(output_file),
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if ffmpeg_result.returncode != 0:
+            raise RuntimeError(ffmpeg_result.stderr.strip() or "ffmpeg mp3 conversion failed")
+
+
+def validate_audio_file(path: Path):
+    if not path.exists():
+        raise RuntimeError(f"Audio file was not created: {path}")
+    if path.stat().st_size < AUDIO_MIN_BYTES:
+        raise RuntimeError(f"Audio file is too small to be valid: {path.stat().st_size} bytes")
+
+    probe = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration,size",
+            "-of",
+            "json",
+            str(path),
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if probe.returncode != 0:
+        raise RuntimeError(probe.stderr.strip() or "ffprobe validation failed")
+
+    try:
+        payload = json.loads(probe.stdout)
+        duration = float(payload["format"]["duration"])
+    except Exception as exc:
+        raise RuntimeError(f"Failed to parse audio metadata: {exc}") from exc
+
+    if duration < AUDIO_MIN_DURATION:
+        raise RuntimeError(f"Audio duration is too short to be valid: {duration:.2f}s")
 
 
 def load_episodes() -> list[dict]:
@@ -276,6 +519,15 @@ def save_episodes(episodes: list[dict]):
 def save_script(date_key: str, script: str):
     SCRIPT_DIR.mkdir(parents=True, exist_ok=True)
     (SCRIPT_DIR / f"{date_key}.txt").write_text(script, encoding="utf-8")
+
+
+def resolve_existing_audio_file(date_key: str) -> Optional[Path]:
+    audio_file_env = os.getenv("AUDIO_FILE")
+    if audio_file_env:
+        return Path(audio_file_env)
+    if os.getenv("USE_EXISTING_AUDIO") == "1":
+        return AUDIO_DIR / f"{date_key}.mp3"
+    return None
 
 
 def public_url(path: Path) -> str:
@@ -335,7 +587,11 @@ def episode_exists(episodes: list[dict], guid: str) -> bool:
 
 
 def main():
-    local_now = today_local()
+    episode_date = os.getenv("EPISODE_DATE")
+    if episode_date:
+        local_now = datetime.strptime(episode_date, "%Y-%m-%d").replace(tzinfo=ZoneInfo(TZ_NAME))
+    else:
+        local_now = today_local()
     date_key = local_now.strftime("%Y-%m-%d")
     date_text = local_now.strftime("%Y年%m月%d日")
     guid = f"daily-football-{date_key}"
@@ -347,19 +603,33 @@ def main():
         return
 
     script_file = os.getenv("SCRIPT_FILE")
+    manual_news_env = os.getenv("NEWS_JSON_FILE")
+    manual_news_path = Path(manual_news_env) if manual_news_env else manual_news_file_for_date(date_key)
     items = []
     if script_file:
         script = Path(script_file).read_text(encoding="utf-8")
+    elif manual_news_path.exists():
+        items = load_manual_news(manual_news_path, limit=10)
+        script = build_script(items, date_text)
     else:
-        items = collect_top_news(limit=10)
+        items, failures = collect_top_news(limit=10)
         if not items:
-            raise RuntimeError("No football news found today.")
+            raise RuntimeError(build_no_news_error(date_key, failures))
         script = build_script(items, date_text)
 
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
     save_script(date_key, script)
     audio_file = AUDIO_DIR / f"{date_key}.mp3"
-    asyncio.run(synthesize_audio(script, audio_file))
+    existing_audio_file = resolve_existing_audio_file(date_key)
+    if existing_audio_file:
+        existing_audio_file = existing_audio_file.resolve()
+        if not existing_audio_file.exists():
+            raise RuntimeError(f"Existing audio file not found: {existing_audio_file}")
+        if existing_audio_file != audio_file.resolve():
+            audio_file.write_bytes(existing_audio_file.read_bytes())
+    else:
+        asyncio.run(synthesize_audio(script, audio_file))
+    validate_audio_file(audio_file)
 
     if items:
         description = "\n".join(
