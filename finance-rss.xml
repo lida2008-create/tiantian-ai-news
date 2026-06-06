@@ -7,7 +7,7 @@
     <description>每天用十条重要财经新闻，快速梳理全球市场、宏观经济、科技股、能源、汇率和资本流动。</description>
     <link>https://lida2008-create.github.io/tiantian-ai-news/</link>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 05 Jun 2026 22:48:31 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 06 Jun 2026 09:10:15 GMT</lastBuildDate>
     <generator>Codex static podcast generator</generator>
     <itunes:author>天天财经</itunes:author>
     <itunes:owner>
@@ -42,6 +42,16 @@
       <pubDate>Fri, 05 Jun 2026 22:48:31 GMT</pubDate>
       <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-05-cn-reissue-wangwangit-yunyang-newscast.mp3" length="1940544" type="audio/mpeg"/>
       <itunes:duration>00:05:23</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
+      <title>天天财经｜2026-06-06 十条财经新闻</title>
+      <description>这里是天天财经，今天是二零二六年六月六日，主播天天带你快速梳理今天的十条财经新闻。今天的全球市场波动明显放大，主线是美国就业数据强于预期，利率预期重新升温，黄金、科技股、债券和加密资产同步承压。 第一条，美国非农就业报告强于市场预期。北京时间周六凌晨公布的数据改变了市场对美国利率路径的判断，投资者重新押注高利率可能维持更久。就业数据偏强，意味着美国经济短期韧性仍在，但也削弱了市场对快速宽松的期待。这个变化直接影响了隔夜股市、债市、黄金和美元交易。 第二条，美国股市大幅收跌，科技板块跌幅居前。隔夜美股主要指数同步走弱，科技股承压更明显，纳斯达克指数出现大幅</description>
+      <link>https://lida2008-create.github.io/tiantian-ai-news/episodes/tiantian-finance-2026-06-06.html</link>
+      <guid isPermaLink="false">https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-06-wangwangit-yunyang-newscast.mp3</guid>
+      <pubDate>Sat, 06 Jun 2026 09:10:15 GMT</pubDate>
+      <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-06-wangwangit-yunyang-newscast.mp3" length="1662912" type="audio/mpeg"/>
+      <itunes:duration>00:04:37</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
   </channel>
