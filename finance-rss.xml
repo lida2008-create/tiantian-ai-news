@@ -7,7 +7,7 @@
     <description>每天用十条重要财经新闻，快速梳理全球市场、宏观经济、科技股、能源、汇率和资本流动。</description>
     <link>https://lida2008-create.github.io/tiantian-ai-news/</link>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 06 Jun 2026 09:10:15 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 07 Jun 2026 06:58:36 GMT</lastBuildDate>
     <generator>Codex static podcast generator</generator>
     <itunes:author>天天财经</itunes:author>
     <itunes:owner>
@@ -52,6 +52,16 @@
       <pubDate>Sat, 06 Jun 2026 09:10:15 GMT</pubDate>
       <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-06-wangwangit-yunyang-newscast.mp3" length="1662912" type="audio/mpeg"/>
       <itunes:duration>00:04:37</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
+      <title>天天财经｜2026-06-07 十条财经新闻</title>
+      <description>这里是天天财经，今天是二零二六年六月七日，主播天天带你快速梳理今天的十条财经新闻。周末市场没有普通交易日那么密集，但全球资产在强劲美国就业数据之后继续消化冲击，利率、科技股、黄金、原油和加密资产都在重新定价。 第一条，美国强劲非农继续影响全球市场。最新就业数据好于市场预期，投资者重新评估美国利率维持高位的时间。就业强，说明经济韧性还在；但对金融市场来说，宽松预期降温，资金成本压力上升，成长股、黄金和高波动资产都会受到影响。 第二条，科技股回调成为海外市场焦点。此前人工智能和大型科技公司带动美股上涨，但估值越高，对利率变化越敏感。非农数据公布后，市场从追逐</description>
+      <link>https://lida2008-create.github.io/tiantian-ai-news/episodes/tiantian-finance-2026-06-07.html</link>
+      <guid isPermaLink="false">https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-07-wangwangit-yunyang-newscast.mp3</guid>
+      <pubDate>Sun, 07 Jun 2026 06:58:36 GMT</pubDate>
+      <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-06-07-wangwangit-yunyang-newscast.mp3" length="1511280" type="audio/mpeg"/>
+      <itunes:duration>00:04:12</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
   </channel>
