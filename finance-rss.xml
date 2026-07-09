@@ -7,7 +7,7 @@
     <description>每天用十条重要财经新闻，快速梳理全球市场、宏观经济、科技股、能源、汇率和资本流动。</description>
     <link>https://lida2008-create.github.io/tiantian-ai-news/</link>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 09 Jul 2026 00:01:28 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2026 23:58:40 GMT</lastBuildDate>
     <generator>Codex static podcast generator</generator>
     <itunes:author>天天财经</itunes:author>
     <itunes:owner>
@@ -131,6 +131,16 @@
       <guid isPermaLink="false">https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-07-09-wangwangit-yunyang-newscast.mp3</guid>
       <pubDate>Thu, 09 Jul 2026 00:01:28 GMT</pubDate>
       <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-07-09-wangwangit-yunyang-newscast.mp3" length="418032" type="audio/mpeg"/>
+      <itunes:duration>00:01:10</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
+      <title>天天财经｜2026-07-10 十条财经新闻</title>
+      <description>这里是天天财经，今天是2026年7月10日，主播天天带你快速听懂今天最重要的十条财经新闻。 第一条，先看市场情绪，全球股市震荡调整。 第二条，第二个焦点转向政策面，主要央行政策预期变化。 第三条，接下来是大宗商品，国际油价和黄金价格波动。 第四条，第四条看汇率和资金流向，人民币与美元汇率走势。 第五条，第五条关注科技和成长板块，科技股和银行股表现分化。 第六条，第六条来自债券市场，债券收益率变化。 第七条，第七条说到银行和金融机构，消费和企业盈利预期。 第八条，第八条看消费与企业经营，资本市场资金流向。 第九条，第九条关注海外市场，大宗商品价格变化。 第</description>
+      <link>https://lida2008-create.github.io/tiantian-ai-news/episodes/tiantian-finance-2026-07-10.html</link>
+      <guid isPermaLink="false">https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-07-10-wangwangit-yunyang-newscast.mp3</guid>
+      <pubDate>Thu, 09 Jul 2026 23:58:40 GMT</pubDate>
+      <enclosure url="https://lida2008-create.github.io/tiantian-ai-news/audio/tiantian-finance-2026-07-10-wangwangit-yunyang-newscast.mp3" length="417312" type="audio/mpeg"/>
       <itunes:duration>00:01:10</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
